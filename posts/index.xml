@@ -1,11 +1,9 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Zach&#39;s Blog</title>
-        <link>https://zacharysalvatore.github.io/</link>
-        <description>日拱一卒，功不唐捐</description>
-        <generator>Hugo -- gohugo.io</generator><language>en-US</language><lastBuildDate>Thu, 17 Sep 2020 13:23:30 &#43;0000</lastBuildDate>
-            <atom:link href="https://zacharysalvatore.github.io/index.xml" rel="self" type="application/rss+xml" />
-        <item>
+        <title>All Posts - Zach&#39;s Blog</title>
+        <link>https://zacharysalvatore.github.io/posts/</link>
+        <description>All Posts | Zach&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-US</language><lastBuildDate>Thu, 17 Sep 2020 13:23:30 &#43;0000</lastBuildDate><atom:link href="https://zacharysalvatore.github.io/posts/" rel="self" type="application/rss+xml" /><item>
     <title>Hello Hugo</title>
     <link>https://zacharysalvatore.github.io/hellohugo/</link>
     <pubDate>Thu, 17 Sep 2020 13:23:30 &#43;0000</pubDate>
