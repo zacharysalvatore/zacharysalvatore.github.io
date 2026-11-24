@@ -38,4 +38,3 @@ function greet(name: string): string {
 console.log(greet('World'))
 ```
 
-> 你可以随时删除或编辑本篇文章，开始记录你的技术探索与思考。

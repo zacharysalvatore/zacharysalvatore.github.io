@@ -111,7 +111,8 @@
 }
 
 /* ── highlight.js token 配色 ──
-   取自 highlight.js/styles/github-dark.css，在暗色下整体替换 github.css。 */
+   取自 highlight.js/styles/github-dark.css，在暗色下整体替换 github.css。
+   同时覆盖 Minecraft 暗色主题与 Pretext（bunny）暗色主题。 */
 
 [data-theme="dark"] .markdown-body .hljs-doctag,
 [data-theme="dark"] .markdown-body .hljs-keyword,
@@ -119,14 +120,25 @@
 [data-theme="dark"] .markdown-body .hljs-template-tag,
 [data-theme="dark"] .markdown-body .hljs-template-variable,
 [data-theme="dark"] .markdown-body .hljs-type,
-[data-theme="dark"] .markdown-body .hljs-variable.language_ {
+[data-theme="dark"] .markdown-body .hljs-variable.language_,
+.pretext-root.is-dark .pt-prose .hljs-doctag,
+.pretext-root.is-dark .pt-prose .hljs-keyword,
+.pretext-root.is-dark .pt-prose .hljs-meta .hljs-keyword,
+.pretext-root.is-dark .pt-prose .hljs-template-tag,
+.pretext-root.is-dark .pt-prose .hljs-template-variable,
+.pretext-root.is-dark .pt-prose .hljs-type,
+.pretext-root.is-dark .pt-prose .hljs-variable.language_ {
   color: #ff7b72;
 }
 
 [data-theme="dark"] .markdown-body .hljs-title,
 [data-theme="dark"] .markdown-body .hljs-title.class_,
 [data-theme="dark"] .markdown-body .hljs-title.class_.inherited__,
-[data-theme="dark"] .markdown-body .hljs-title.function_ {
+[data-theme="dark"] .markdown-body .hljs-title.function_,
+.pretext-root.is-dark .pt-prose .hljs-title,
+.pretext-root.is-dark .pt-prose .hljs-title.class_,
+.pretext-root.is-dark .pt-prose .hljs-title.class_.inherited__,
+.pretext-root.is-dark .pt-prose .hljs-title.function_ {
   color: #d2a8ff;
 }
 
@@ -139,54 +151,83 @@
 [data-theme="dark"] .markdown-body .hljs-variable,
 [data-theme="dark"] .markdown-body .hljs-selector-attr,
 [data-theme="dark"] .markdown-body .hljs-selector-class,
-[data-theme="dark"] .markdown-body .hljs-selector-id {
+[data-theme="dark"] .markdown-body .hljs-selector-id,
+.pretext-root.is-dark .pt-prose .hljs-attr,
+.pretext-root.is-dark .pt-prose .hljs-attribute,
+.pretext-root.is-dark .pt-prose .hljs-literal,
+.pretext-root.is-dark .pt-prose .hljs-meta,
+.pretext-root.is-dark .pt-prose .hljs-number,
+.pretext-root.is-dark .pt-prose .hljs-operator,
+.pretext-root.is-dark .pt-prose .hljs-variable,
+.pretext-root.is-dark .pt-prose .hljs-selector-attr,
+.pretext-root.is-dark .pt-prose .hljs-selector-class,
+.pretext-root.is-dark .pt-prose .hljs-selector-id {
   color: #79c0ff;
 }
 
 [data-theme="dark"] .markdown-body .hljs-regexp,
 [data-theme="dark"] .markdown-body .hljs-string,
-[data-theme="dark"] .markdown-body .hljs-meta .hljs-string {
+[data-theme="dark"] .markdown-body .hljs-meta .hljs-string,
+.pretext-root.is-dark .pt-prose .hljs-regexp,
+.pretext-root.is-dark .pt-prose .hljs-string,
+.pretext-root.is-dark .pt-prose .hljs-meta .hljs-string {
   color: #a5d6ff;
 }
 
 [data-theme="dark"] .markdown-body .hljs-built_in,
-[data-theme="dark"] .markdown-body .hljs-symbol {
+[data-theme="dark"] .markdown-body .hljs-symbol,
+.pretext-root.is-dark .pt-prose .hljs-built_in,
+.pretext-root.is-dark .pt-prose .hljs-symbol {
   color: #ffa657;
 }
 
 [data-theme="dark"] .markdown-body .hljs-comment,
 [data-theme="dark"] .markdown-body .hljs-code,
-[data-theme="dark"] .markdown-body .hljs-formula {
+[data-theme="dark"] .markdown-body .hljs-formula,
+.pretext-root.is-dark .pt-prose .hljs-comment,
+.pretext-root.is-dark .pt-prose .hljs-code,
+.pretext-root.is-dark .pt-prose .hljs-formula {
   color: #8b949e;
 }
 
 [data-theme="dark"] .markdown-body .hljs-name,
 [data-theme="dark"] .markdown-body .hljs-quote,
 [data-theme="dark"] .markdown-body .hljs-selector-tag,
-[data-theme="dark"] .markdown-body .hljs-selector-pseudo {
+[data-theme="dark"] .markdown-body .hljs-selector-pseudo,
+.pretext-root.is-dark .pt-prose .hljs-name,
+.pretext-root.is-dark .pt-prose .hljs-quote,
+.pretext-root.is-dark .pt-prose .hljs-selector-tag,
+.pretext-root.is-dark .pt-prose .hljs-selector-pseudo {
   color: #7ee787;
 }
 
 [data-theme="dark"] .markdown-body .hljs-subst,
 [data-theme="dark"] .markdown-body .hljs-emphasis,
-[data-theme="dark"] .markdown-body .hljs-strong {
+[data-theme="dark"] .markdown-body .hljs-strong,
+.pretext-root.is-dark .pt-prose .hljs-subst,
+.pretext-root.is-dark .pt-prose .hljs-emphasis,
+.pretext-root.is-dark .pt-prose .hljs-strong {
   color: var(--text-primary);
 }
 
-[data-theme="dark"] .markdown-body .hljs-section {
+[data-theme="dark"] .markdown-body .hljs-section,
+.pretext-root.is-dark .pt-prose .hljs-section {
   color: #58a6ff;
 }
 
-[data-theme="dark"] .markdown-body .hljs-bullet {
+[data-theme="dark"] .markdown-body .hljs-bullet,
+.pretext-root.is-dark .pt-prose .hljs-bullet {
   color: #f2cc60;
 }
 
-[data-theme="dark"] .markdown-body .hljs-addition {
+[data-theme="dark"] .markdown-body .hljs-addition,
+.pretext-root.is-dark .pt-prose .hljs-addition {
   color: #aff5b4;
   background-color: #033a16;
 }
 
-[data-theme="dark"] .markdown-body .hljs-deletion {
+[data-theme="dark"] .markdown-body .hljs-deletion,
+.pretext-root.is-dark .pt-prose .hljs-deletion {
   color: #ffdcd7;
   background-color: #67060c;
 }

@@ -125,6 +125,9 @@ let activeFont = `${BASE_FONT_SIZE}px "JetBrains Mono", "Fira Code", monospace`
 let chars: CharCell[] = []
 let animFrame = 0
 let canvasHeight = 0
+let lastTime = 0
+let accumPhase = 0
+let accumWavePhase = 0
 
 let targetIntensity = 0
 let currentIntensity = 0
@@ -227,7 +230,11 @@ function animate(time: number) {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
-  currentIntensity += (targetIntensity - currentIntensity) * 0.04
+  const dt = lastTime ? Math.min(time - lastTime, 50) : 16.67
+  lastTime = time
+
+  const lerpFactor = 1 - Math.exp(-dt * 0.0024)
+  currentIntensity += (targetIntensity - currentIntensity) * lerpFactor
 
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   ctx.font = activeFont
@@ -237,19 +244,23 @@ function animate(time: number) {
   const t = currentIntensity
   const ampY = 0.3 + t * 1.8
   const ampX = 0.1 + t * 0.6
-  const speed = 0.0003 + t * 0.0005
+  const speed = 0.0003 + t * 0.00035
+  const waveSpeed = 0.0008 + t * 0.0006
   const alphaBase = 0.8 - t * 0.12
   const alphaRange = 0.15 + t * 0.15
 
+  accumPhase += dt * speed
+  accumWavePhase += dt * waveSpeed
+
   for (const c of chars) {
-    const phase = time * speed + c.lineIndex * 0.25 + c.charIndex * 0.08
+    const phase = accumPhase + c.lineIndex * 0.25 + c.charIndex * 0.08
     let dx = Math.cos(phase * 0.7) * ampX
     let dy = Math.sin(phase) * ampY
     let alpha = alphaBase + alphaRange * Math.sin(phase + 0.5)
 
     if (c.isWave) {
-      dy = Math.sin(time * (0.0008 + t * 0.001) + c.charIndex * 0.3) * (0.5 + t * 2.0)
-      alpha = alphaBase + alphaRange * Math.sin(time * 0.001 + c.charIndex * 0.3)
+      dy = Math.sin(accumWavePhase + c.charIndex * 0.3) * (0.5 + t * 2.0)
+      alpha = alphaBase + alphaRange * Math.sin(accumWavePhase + c.charIndex * 0.3)
     }
 
     if (currentIntensity > 1.5) {
@@ -315,6 +326,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (animFrame) cancelAnimationFrame(animFrame)
   if (mouseIdleTimer) clearTimeout(mouseIdleTimer)
+  lastTime = 0
   document.removeEventListener('mousemove', onDocMouseMove)
   canvasRef.value?.removeEventListener('mouseenter', onCanvasEnter)
   canvasRef.value?.removeEventListener('mouseleave', onCanvasLeave)
