@@ -11,21 +11,15 @@ import { prerenderPlugin } from './src/plugins/prerender-plugin'
 // 当前默认关闭轮转，只为 api2 单 API 建立本地代理；域名池配置保留以便后续恢复。
 // Vite 配置阶段用 loadEnv 按 mode 读取 .env，保持本地代理与前端端点一致。
 
-const BUILTIN_BACKUP_BASES = [
-  'https://api.turing158.de5.net',
-  'https://api.friendlink.de5.net',
-  'https://api.github-proxy.de5.net',
-  'https://api.add-friendlink.de5.net',
-]
-
 function createBackendPool(env: Record<string, string | undefined>): string[] {
-  const base = (env.VITE_BACKEND_BASE || 'https://api2.turing158.dpdns.org').replace(/\/+$/, '')
+  const base = (env.VITE_BACKEND_BASE || '').replace(/\/+$/, '')
+  if (!base) return []
   if (env.VITE_BACKEND_POOL_ENABLED !== 'true') return [base]
 
   const raw = env.VITE_BACKEND_POOL
   const list = raw
     ? raw.split(',').map((s) => s.trim()).filter(Boolean)
-    : [base, ...BUILTIN_BACKUP_BASES]
+    : [base]
   const seen = new Set<string>()
   const out: string[] = []
   for (const item of list) {
@@ -37,25 +31,13 @@ function createBackendPool(env: Record<string, string | undefined>): string[] {
   return out.length > 0 ? out : [base]
 }
 
-// ── 本地接口代理 ──
-// 后端 Worker 的 CORS 白名单由 NORMAL_OPERATE_ALLOW_ORIGIN 控制，只放行线上域名与
-// localhost:3000。本地用 127.0.0.1、局域网 IP 或其它端口打开时会被浏览器拦截。
-// 这里把池内每个远端地址映射到各自的同源路径，前端在本地自动改用该路径
-// （见 src/utils/apiEndpoint.ts 与 src/utils/backendPool.ts）；
-// 线上（GitHub Pages 纯静态托管，无代理能力）仍是直连绝对地址。
-//
-// ⚠️ 必须按前缀长度【降序】排列。Vite 用 `url.startsWith(context)` 判断命中
-//    （见 doesProxyContextMatchUrl），而 `/api/turing158` 是 `/api/turing158-1`
-//    的前缀串 —— 若索引 0 排在前面，`/api/turing158-1/...` 会被它抢先吃掉，
-//    错转发到索引 0 的域名。降序后长前缀先匹配，歧义消除。
-//    命名规则必须与 src/utils/backendPool.ts 的 proxyPrefixFor() 保持一致。
-// 转发时把 Origin 伪装成线上站点域名，避免后端按白名单判定为非法来源
-const SITE_ORIGIN = 'https://blog.turing158.cc.cd'
+const SITE_ORIGIN = 'https://zacharysalvatore.github.io'
 
 function createApiProxy(pool: string[]): Record<string, ProxyOptions> {
+  if (pool.length === 0) return {}
   const API_PROXY: Record<string, string> = Object.fromEntries(
     pool.map((base, index) => [
-      index === 0 ? '/api/turing158' : `/api/turing158-${index}`,
+      index === 0 ? '/api/backend' : `/api/backend-${index}`,
       base,
     ]).sort((a, b) => b[0].length - a[0].length)
   )
@@ -85,9 +67,9 @@ const createViteConfig = (BACKEND_POOL: string[], apiProxy: Record<string, Proxy
       injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Turing_ICE Blog',
-        short_name: 'Turing_ICE',
-        description: '基于 Vue 3 + Vite 的个人博客系统',
+        name: 'Zach_Gao Blog',
+        short_name: 'Zach_Gao',
+        description: 'Zach_Gao 的个人博客 — 拥抱 AI，热爱开源和技术分享。',
         theme_color: '#4a7c59',
         background_color: '#f5f0e8',
         display: 'standalone',
@@ -188,15 +170,13 @@ const createViteConfig = (BACKEND_POOL: string[], apiProxy: Record<string, Proxy
             },
           },
           {
-            // GitHub REST 与其余后端接口统一走合并后的 Worker（Worker 侧已注入 PAT + 边缘缓存），
-            // 这里再缓存一层，避免离线/开发环境反复回源。
-            // 域名池内的主机名按 BACKEND_POOL 动态生成，切换备用域名后缓存依然命中；
-            // 每个域名各有独立缓存（Workbox 按 URL 区分），这是可接受的。
-            urlPattern: new RegExp(
-              `^https://(${BACKEND_POOL.map((b) =>
-                b.replace(/^https?:\/\//, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-              ).join('|')})/github/api/`
-            ),
+            urlPattern: BACKEND_POOL.length > 0
+              ? new RegExp(
+                  `^https://(${BACKEND_POOL.map((b) =>
+                    b.replace(/^https?:\/\//, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+                  ).join('|')})/github/api/`
+                )
+              : /^https:\/\/api\.github\.com\//,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'github-api-cache',

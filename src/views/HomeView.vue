@@ -223,7 +223,7 @@
         </div>
 
         <!-- Vibe Coding 活动卡（方案 B · 浓度热力） -->
-        <VibeCodingWidget />
+        <VibeCodingWidget v-if="config.vibe.api" />
 
       </div>
 
@@ -303,7 +303,7 @@ const gramophoneInitialized = ref(false)
 
 const fullBlogName = config.blog.title
 const { displayedText: blogName, showCursor: showBlogCursor } = useTypewriter(fullBlogName, 120, 60, 2000, 800)
-const avatarUrl = 'https://foruda.gitee.com/avatar/1682216074543204020/12834578_turing-ice_1682216074.png'
+const avatarUrl = config.blog.avatar
 const hasGitHubConfig = !!(config.github.owner && config.github.repo)
 const githubUser = config.github.owner
 const githubProfileUrl = `https://github.com/${githubUser}`
@@ -705,10 +705,9 @@ function mapGiteeEvent(ev: any): ActivityItem | null {
 }
 
 async function fetchGiteeTimeline(): Promise<any[]> {
-  // 走统一后端基址（域名池首项），不要硬编码域名 —— 否则切到备用域名后这里会失效
-  const target = `${config.backendBase}/gitee/contribution`
+  if (!giteeUser) return []
   const sources = [
-    target,
+    ...(config.backendBase ? [`${config.backendBase}/gitee/contribution`] : []),
     `https://gitee.com/${giteeUser}/contribution_timeline?limit=10`,
     `https://corsproxy.io/?url=${encodeURIComponent(`https://gitee.com/${giteeUser}/contribution_timeline?limit=10`)}`,
     `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://gitee.com/${giteeUser}/contribution_timeline?limit=10`)}`,

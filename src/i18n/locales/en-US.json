@@ -199,23 +199,15 @@
   },
   "about": {
     "title": "About",
-    "bio": "Java / C# developer, passionate about open source and tech sharing.",
+    "bio": "Embracing AI, passionate about open source and tech sharing.",
     "skills": "Tech Stack",
     "skillsBackend": "Backend",
     "skillsFrontend": "Frontend",
     "skillsTools": "Tools & Others",
     "timeline": "Timeline",
     "timelineLatestBadge": "Latest",
-    "timelineItem1Title": "Learning & Interning by Interest",
-    "timelineItem1Desc": "Developed various software and systems based on personal interest (Minecraft). Practiced frameworks like Flutter, Qt, WPF, and learned languages including Dart, C++, C#, and Go.",
-    "timelineItem2Title": "Systematic Learning & Development",
-    "timelineItem2Desc": "Began systematically learning Java Spring ecosystem and JavaFX framework, developing web systems and desktop applications.",
-    "timelineItem3Title": "Exploring Gradle & C++",
-    "timelineItem3Desc": "Started exploring how to create mods with MDK, and joined a programming club to learn C++ fundamentals.",
-    "timelineItem4Title": "First Touch with Code & Server Plugins",
-    "timelineItem4Desc": "From tweaking config files to getting hands-on with Java code for server plugins.",
-    "timelineItem5Title": "The Enlightenment",
-    "timelineItem5Desc": "Discovered Minecraft, which sparked a love for this open world and ignited an interest in programming.",
+    "timelineItem1Title": "Launched Personal Blog",
+    "timelineItem1Desc": "Launched this personal blog and developer toolbox built with Vue 3 + Vite + GitHub Pages to share notes on AI, open source, and engineering.",
     "contact": "Contact",
     "email": "Email"
   },
@@ -842,7 +834,7 @@
     },
     "githubInfo": {
       "username": "GitHub username",
-      "usernamePlaceholder": "e.g. Turing158",
+      "usernamePlaceholder": "e.g. zacharysalvatore",
       "query": "Look up",
       "loading": "Loading...",
       "loadFailed": "Lookup failed. Please check the username and retry.",
@@ -1035,13 +1027,13 @@
     "achievements": "Achievements"
   },
   "seo": {
-    "home": "Turing_ICE's personal blog — technical articles, developer tools and study notes",
+    "home": "Zach_Gao's personal blog — Embracing AI, passionate about open source and tech sharing.",
     "articles": "Browse all technical articles and tutorials",
     "projects": "Projects in progress, completed projects and tutorials",
     "releases": "Releases, changelogs and downloads across all projects",
     "tools": "Developer toolbox: JSON formatter, Base64 codec, regex tester, color converter and more",
-    "about": "Learn about Turing_ICE's background, skills and contact info",
-    "friends": "Friend links — blogroll of Turing_ICE's blog",
+    "about": "Learn about Zach_Gao's background, skills and contact info",
+    "friends": "Friend links — blogroll of Zach_Gao's blog",
     "achievements": "Achievement / badge system — discover every hidden achievement"
   },
   "pageReleases": {
@@ -1251,7 +1243,7 @@
     "coffee": "Cups of Coffee",
     "bookHeight": "Books Stacked",
     "laps": "Playground Laps",
-    "copyright": "© {year} Turing_ICE · Powered by code and caffeine"
+    "copyright": "© {year} Zach_Gao"
   },
   "achievements": {
     "title": "Achievements",

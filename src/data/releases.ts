@@ -5,15 +5,6 @@
  * prerender-plugin 用它为每个仓库生成 `/release/<repo>` 的真实页面与 sitemap 条目。
  * 运行时由 `src/composables/useReleases.ts` 使用。
  */
-export const RELEASE_REPOS = [
-  'SFMCL-Transformed',
-  'StarFall-Minecraft-Launcher',
-  'SFMC',
-  'StarFall-Vue',
-  'StarFall-SpringBoot',
-  'MemeMomo',
-  'CodeCraft',
-  'dsh-desktop',
-] as const
+export const RELEASE_REPOS: readonly string[] = [] as const
 
 export type ReleaseRepo = (typeof RELEASE_REPOS)[number]

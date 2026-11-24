@@ -21,8 +21,8 @@ export interface SeoOptions {
 
 const SITE_URL = config.site.url
 const DEFAULT_IMAGE = '/icons/icon-512.png'
-const DEFAULT_DESCRIPTION = 'Turing_ICE 的个人博客，分享技术文章、开发工具和学习笔记'
-const DEFAULT_KEYWORDS = ['博客', '技术', 'Vue', '前端', '开发']
+const DEFAULT_DESCRIPTION = 'Zach_Gao 的个人博客 — 拥抱 AI，热爱开源和技术分享。'
+const DEFAULT_KEYWORDS = ['博客', '技术', 'AI', '开源', '开发']
 
 export function useSeo(options: SeoOptions = {}) {
   const { locale } = useI18n()
@@ -111,7 +111,6 @@ export function useSeo(options: SeoOptions = {}) {
       { name: 'twitter:title', content: title },
       { name: 'twitter:description', content: description },
       { name: 'twitter:image', content: image },
-      { name: 'twitter:creator', content: '@turing_ice' },
 
       // 文章专用 OG 标签
       ...(type.value === 'article'

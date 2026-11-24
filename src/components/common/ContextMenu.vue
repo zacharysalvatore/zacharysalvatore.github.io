@@ -10,7 +10,7 @@
       >
         <!-- 品牌标识（无功能） -->
         <div class="context-menu-brand">
-          <span class="brand-text">Turing_ICE</span>
+          <span class="brand-text">Zach_Gao</span>
         </div>
 
         <div v-if="!sidebarOnly" class="context-menu-divider"></div>

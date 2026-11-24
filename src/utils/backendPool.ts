@@ -47,9 +47,9 @@ export interface PoolEntry {
 const STORAGE_KEY = 'blog-backend-pool'
 const STATE_VERSION = 1
 
-/** 索引 0 用 /api/turing158，其余用 /api/turing158-<i>（映射见 vite.config.ts） */
+/** 索引 0 用 /api/backend，其余用 /api/backend-<i>（映射见 vite.config.ts） */
 export function proxyPrefixFor(index: number): string {
-  return index === 0 ? '/api/turing158' : `/api/turing158-${index}`
+  return index === 0 ? '/api/backend' : `/api/backend-${index}`
 }
 
 /** 域名池（顺序即优先级，由 config.backendPool 决定） */

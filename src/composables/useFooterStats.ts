@@ -4,7 +4,7 @@ import { useArticles } from '@/composables/useArticles'
 import { getTotalViews } from '@/api/viewCount'
 
 // 博客起始日期（用于计算运行天数）
-const BLOG_START_DATE = new Date('2022-06-01')
+const BLOG_START_DATE = new Date('2026-11-23')
 
 /**
  * Footer 趣味统计 composable

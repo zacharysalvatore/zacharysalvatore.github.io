@@ -46,7 +46,7 @@ function dismissPrompt() {
     <div v-if="showPrompt" class="pwa-prompt">
       <div class="pwa-prompt__content">
         <div class="pwa-prompt__icon">
-          <img src="/icons/icon-192.png" alt="Turing_ICE" />
+          <img src="/icons/icon-192.png" alt="Zach_Gao" />
         </div>
         <div class="pwa-prompt__text">
           <h3>安装应用</h3>

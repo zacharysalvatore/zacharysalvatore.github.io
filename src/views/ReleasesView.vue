@@ -135,16 +135,7 @@ function goToDetail(repo: string) {
 }
 
 function getStandalonePage(repo: string): string | null {
-  const map: Record<string, string> = {
-    'SFMCL-Transformed': 'https://sfmcl.cc.cd/',
-    'StarFall-Minecraft-Launcher': '/sfmc',
-    'SFMC': '/sfmc-jar',
-    'StarFall-Vue': '/starfall-forum',
-    'StarFall-SpringBoot': '/starfall-forum',
-    'CodeCraft': 'https://codecraft.cc.cd/',
-    'MemeMomo': 'https://mememomo.cc.cd/',
-    'dsh-desktop': 'https://github.com/Turing158/dsh-desktop',
-  }
+  const map: Record<string, string> = {}
   return map[repo] ?? null
 }
 
@@ -165,7 +156,7 @@ onMounted(() => {
 })
 
 // ── 右键菜单上下文提供者 ──
-const GITHUB_OWNER = 'Turing158'
+const GITHUB_OWNER = 'zacharysalvatore'
 
 const unregisterContextMenu = registerContextProvider((target) => {
   // 仅在发行卡片上右键时提供

@@ -178,10 +178,11 @@ import GlowberryVine from '@/components/common/GlowberryVine.vue'
 import PageTitle from '@/components/common/PageTitle.vue'
 import { usePageSeo } from '@/composables/useSeo'
 import { GITHUB_API_HEADERS, githubUrl } from '@/utils/githubApi'
+import { config } from '@/config'
 
 const router = useRouter()
 
-const GITHUB_OWNER = 'Turing158'
+const GITHUB_OWNER = config.github.owner
 
 const props = defineProps<{ repo?: string }>()
 
@@ -200,7 +201,7 @@ const loading = ref(false)
 const error = ref<string | null>(null)
 const commits = ref<CommitData[]>([])
 
-const repoName = computed(() => props.repo || 'StarFall-Minecraft-Launcher')
+const repoName = computed(() => props.repo || config.github.repo)
 
 // ── 布局常量 ──
 const ROW_H = 90    // 藤蔓原始切片高度

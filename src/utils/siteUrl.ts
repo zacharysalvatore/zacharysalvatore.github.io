@@ -11,7 +11,7 @@
  */
 
 /** 默认站点域名。可用 VITE_SITE_URL 覆盖（见 src/config.ts） */
-export const DEFAULT_SITE_URL = 'https://blog.turing158.cc.cd'
+export const DEFAULT_SITE_URL = 'https://zacharysalvatore.github.io'
 
 /**
  * 规范化基址：去掉末尾斜杠，保证拼接结果只有一个分隔斜杠。

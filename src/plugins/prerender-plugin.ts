@@ -36,10 +36,10 @@ import { buildJsonLd, resolveImage } from '../utils/structuredData'
 import { verifyBuildOutput } from './build-verify'
 
 /** 站点默认描述，与 src/composables/useSeo.ts 的 DEFAULT_DESCRIPTION 保持一致 */
-const DEFAULT_DESCRIPTION = 'Turing_ICE 的个人博客，分享技术文章、开发工具和学习笔记'
+const DEFAULT_DESCRIPTION = 'Zach_Gao 的个人博客 — 拥抱 AI，热爱开源和技术分享。'
 const DEFAULT_IMAGE = '/icons/icon-512.png'
-const BLOG_TITLE = 'Turing_ICE'
-const BLOG_AUTHOR = 'Turing158'
+const BLOG_TITLE = 'Zach_Gao'
+const BLOG_AUTHOR = 'Zach_Gao'
 const TITLE_TEMPLATE = '{current_page} | Blog - {blog_title}'
 
 /** 预渲染页的正文容器：挂载时会被 Vue 清空，不产生重复内容 */
@@ -55,7 +55,7 @@ const PRERENDER_STYLE = `
  * /commits 无参时运行时的默认仓库
  * （见 src/views/CommitsView.vue 的 `props.repo || 'StarFall-Minecraft-Launcher'`）
  */
-const DEFAULT_COMMITS_REPO = 'StarFall-Minecraft-Launcher'
+const DEFAULT_COMMITS_REPO = 'zacharysalvatore.github.io'
 
 /**
  * 独立落地页的 head 取值。
@@ -71,23 +71,7 @@ const STANDALONE_HEAD: Record<
     description: (m: Record<string, any>) => string
     ogTitle: (m: Record<string, any>) => string
   }
-> = {
-  sfmc: {
-    title: (m) => pick(m, 'pageTitle.sfmc') || 'StarFall Minecraft Launcher',
-    description: (m) => pick(m, 'sfmc.subTagline') || DEFAULT_DESCRIPTION,
-    ogTitle: () => 'StarFall Minecraft Launcher',
-  },
-  'starfall-forum': {
-    title: () => 'StarFall Minecraft Forum',
-    description: (m) => pick(m, 'forum.subTagline') || DEFAULT_DESCRIPTION,
-    ogTitle: () => 'StarFall Minecraft Forum',
-  },
-  'sfmc-jar': {
-    title: () => 'SFMC - Java Edition',
-    description: (m) => pick(m, 'sfmcJar.description') || DEFAULT_DESCRIPTION,
-    ogTitle: () => 'SFMC - Java Edition',
-  },
-}
+> = {}
 
 interface PageMeta {
   /** 站内路径，如 /articles、（文章）/article/xxx */

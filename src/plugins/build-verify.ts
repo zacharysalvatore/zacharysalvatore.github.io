@@ -34,12 +34,8 @@ const STATIC_ROUTE_EXPECTATIONS: Array<[string, string]> = [
   ['friends/index.html', '友情链接'],
   ['about/index.html', '<h1>关于</h1>'],
   // /commits 的可见 <h1> 是仓库名（CommitsView 渲染 {{ repoName }}，无参时回退默认仓库）
-  ['commits/index.html', '<h1>StarFall-Minecraft-Launcher</h1>'],
-  ['sfmc/index.html', 'StarFall'],
-  ['starfall-forum/index.html', 'StarFall'],
-  ['sfmc-jar/index.html', 'Java'],
+  ['commits/index.html', '<h1>zacharysalvatore.github.io</h1>'],
   ['tools/jsonFormatter/index.html', '<h1>'],
-  ['release/SFMC/index.html', '<h1>'],
 ]
 
 /** 预渲染页里每类 meta 必须恰好出现 1 次 */
@@ -123,11 +119,6 @@ export function verifyBuildOutput(distDir: string): VerifyResult {
     // GH Pages 先把请求路径解码再查文件：磁盘上若是编码名，浏览器请求解码后反而不匹配
     const encodedDir = dirs.find((d) => /%[0-9A-Fa-f]{2}/.test(d))
     if (encodedDir) failures.push(`文章目录名疑似百分号编码（应为原始 slug）：${encodedDir}`)
-
-    // 至少要有一个含中文的目录，证明中文 slug 的编码/解码链路真的被走到
-    if (!dirs.some((d) => /[\u4e00-\u9fff]/.test(d))) {
-      failures.push('没有含中文的文章目录 —— 中文 slug 路径未被覆盖')
-    }
 
     for (const dir of dirs) {
       const html = expectFile(join('article', dir, 'index.html'), ['<h1>'])

@@ -89,6 +89,7 @@ import BlogTip from '@/plugins/blog-tip'
 import ExternalLinkIcon from '@/components/common/ExternalLinkIcon.vue'
 import GrassTerrainDivider from '@/components/common/GrassTerrainDivider.vue'
 import PageTitle from '@/components/common/PageTitle.vue'
+import { config } from '@/config'
 
 const { t } = useI18n()
 
@@ -170,9 +171,9 @@ function openGithub() {
 }
 
 function openGitee() {
-  if (longPressProject.value) {
+  if (longPressProject.value && config.gitee.owner) {
     const repoName = extractRepoName(longPressProject.value.url)
-    open(`https://gitee.com/turing-ice/${repoName}`)
+    open(`https://gitee.com/${config.gitee.owner}/${repoName}`)
   }
   showPlatformDialog.value = false
 }

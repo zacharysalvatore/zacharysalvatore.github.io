@@ -1,13 +1,14 @@
 <template>
   <div id="app-root">
     <ProgressBar />
-    <MainLayout v-if="!isStandalone" />
+    <PretextLayout v-if="isPretextMode" />
+    <MainLayout v-else-if="!isStandalone" />
     <StandaloneLayout v-else />
     <BlogTipContainer />
-    <PwaInstallPrompt v-if="!isStandalone" />
-    <PwaUpdatePrompt v-if="!isStandalone" />
-    <PwaOfflinePage v-if="!isStandalone && !isOnline" />
-    <ContextMenu />
+    <PwaInstallPrompt v-if="!isStandalone && !isPretextMode" />
+    <PwaUpdatePrompt v-if="!isStandalone && !isPretextMode" />
+    <PwaOfflinePage v-if="!isStandalone && !isPretextMode && !isOnline" />
+    <ContextMenu v-if="!isPretextMode" />
   </div>
 </template>
 
@@ -16,6 +17,8 @@ import { computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import StandaloneLayout from '@/layouts/StandaloneLayout.vue'
+import PretextLayout from '@/layouts/PretextLayout.vue'
+import { useHomeStyle } from '@/composables/useHomeStyle'
 import ProgressBar from '@/components/common/ProgressBar.vue'
 import BlogTipContainer from '@/components/common/BlogTipContainer.vue'
 import PwaInstallPrompt from '@/components/common/PwaInstallPrompt.vue'
@@ -34,7 +37,9 @@ useKonamiCode()
 useAchievements()
 
 const route = useRoute()
+const { homeStyle } = useHomeStyle()
 const isStandalone = computed(() => route.meta.layout === 'standalone')
+const isPretextMode = computed(() => !isStandalone.value && homeStyle.value === 'pretext')
 
 const { t, locale } = useI18n()
 

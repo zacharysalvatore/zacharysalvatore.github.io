@@ -1,11 +1,11 @@
-# robots.txt for Turing_ICE Blog
-# https://blog.turing158.cc.cd
+# robots.txt for Zach_Gao Blog
+# https://zacharysalvatore.github.io
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://blog.turing158.cc.cd/sitemap.xml
+Sitemap: https://zacharysalvatore.github.io/sitemap.xml
 
 # Crawl-delay for bots
 User-agent: Googlebot
@@ -16,6 +16,5 @@ Crawl-delay: 2
 
 # 正文片段目录：public/articles/<md5>.html 是无 <html> 标签的裸片段，
 # 仅供应用内部按需 fetch；被抓取会形成大量重复垃圾页。
-# 注意 robots 不影响 fetch，功能无损。
 Disallow: /articles/
 Disallow: /api/

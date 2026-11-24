@@ -150,6 +150,7 @@ import { highlight } from '@/utils/search-highlighter'
 import { useSettings } from '@/composables/useSettings'
 import type { SearchResult } from '@/types/search'
 import ExternalLinkIcon from '@/components/common/ExternalLinkIcon.vue'
+import { config } from '@/config'
 
 const props = defineProps<{
   result: SearchResult
@@ -247,9 +248,9 @@ function openGithub() {
 }
 
 function openGitee() {
-  if (longPressProject.value) {
+  if (longPressProject.value && config.gitee.owner) {
     const repoName = extractRepoName(longPressProject.value.url)
-    open(`https://gitee.com/turing-ice/${repoName}`)
+    open(`https://gitee.com/${config.gitee.owner}/${repoName}`)
   }
   showPlatformDialog.value = false
 }

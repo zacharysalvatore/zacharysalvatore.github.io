@@ -69,6 +69,9 @@ function activeGithubPath(path: string): string {
  *             前导斜杠可有可无；query string 直接跟在后面。
  */
 export function githubUrl(path: string): string {
+  if (!config.github.apiBase) {
+    return fallbackUrl(path)
+  }
   if (!config.backendPoolEnabled) {
     return apiUrl(`${config.github.apiBase}/${path.replace(/^\/+/, '')}`)
   }
@@ -104,6 +107,10 @@ export function githubOptions(init?: {
  */
 export async function githubFetch(path: string, init?: RequestInit): Promise<Response> {
   const headers = { ...GITHUB_API_HEADERS, ...((init?.headers as Record<string, string>) ?? {}) }
+  // 未配置自定义 GitHub 代理时，直接请求官方 api.github.com
+  if (!config.github.apiBase) {
+    return fetch(fallbackUrl(path), { ...init, headers })
+  }
   // 单 API 模式仅请求配置的 GitHub 代理，不轮转域名或回退匿名 GitHub API。
   if (!config.backendPoolEnabled) {
     const url = `${config.github.apiBase}/${path.replace(/^\/+/, '')}`

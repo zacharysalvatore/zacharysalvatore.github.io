@@ -133,6 +133,7 @@ import GrassTerrainDivider from '@/components/common/GrassTerrainDivider.vue'
 import CaveTopBorder from '@/components/common/CaveTopBorder.vue'
 import CaveBottomBorder from '@/components/common/CaveBottomBorder.vue'
 import PageTitle from '@/components/common/PageTitle.vue'
+import { config } from '@/config'
 
 const { t } = useI18n()
 
@@ -143,10 +144,10 @@ usePageSeo(
   '/about',
 )
 
-const name = 'Turing_ICE'
-const avatarUrl = 'https://foruda.gitee.com/avatar/1682216074543204020/12834578_turing-ice_1682216074.png'
+const name = config.blog.title
+const avatarUrl = config.blog.avatar
 
-const profileTags = ['Java', 'C#', 'Vue']
+const profileTags = ['AI', 'Open Source', 'Tech']
 
 interface SkillCategory {
   title: string
@@ -156,15 +157,15 @@ interface SkillCategory {
 const skillCategories = computed<SkillCategory[]>(() => [
   {
     title: t('about.skillsBackend'),
-    skills: ['Java', 'C#', 'Spring Boot', 'MySQL'],
+    skills: ['Python', 'Node.js', 'SQL'],
   },
   {
     title: t('about.skillsFrontend'),
-    skills: ['Vue', 'JavaScript', 'WPF'],
+    skills: ['TypeScript', 'Vue', 'HTML / CSS'],
   },
   {
     title: t('about.skillsTools'),
-    skills: ['Git', 'Docker', 'Linux', 'Claude Code'],
+    skills: ['Git', 'Docker', 'Linux', 'AI Tools'],
   },
 ])
 
@@ -175,11 +176,7 @@ interface TimelineItem {
 }
 
 const timelineItems = computed<TimelineItem[]>(() => [
-  { date: '2024-2026', title: t('about.timelineItem1Title'), desc: t('about.timelineItem1Desc') },
-  { date: '2022-2023', title: t('about.timelineItem2Title'), desc: t('about.timelineItem2Desc') },
-  { date: '2019-2022', title: t('about.timelineItem3Title'), desc: t('about.timelineItem3Desc') },
-  { date: '2016-2018', title: t('about.timelineItem4Title'), desc: t('about.timelineItem4Desc') },
-  { date: '2009-2015', title: t('about.timelineItem5Title'), desc: t('about.timelineItem5Desc') },
+  { date: '2026', title: t('about.timelineItem1Title'), desc: t('about.timelineItem1Desc') },
 ])
 
 interface ContactLink {
@@ -194,15 +191,15 @@ const contactLinks = computed<ContactLink[]>(() => [
   {
     icon: '🐙',
     label: 'GitHub',
-    value: 'Turing158',
-    href: 'https://github.com/Turing158',
+    value: config.github.owner,
+    href: `https://github.com/${config.github.owner}`,
     external: true,
   },
   {
     icon: '📧',
     label: t('about.email'),
-    value: 'turing158@foxmail.com',
-    href: 'mailto:turing158@foxmail.com',
+    value: config.blog.email,
+    href: `mailto:${config.blog.email}`,
     external: false,
   },
 ])

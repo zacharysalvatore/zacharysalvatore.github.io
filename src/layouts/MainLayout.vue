@@ -48,22 +48,6 @@
           </span>
           <span class="nav-text">{{ $t('search.trigger') }}</span>
         </button>
-        <a
-          href="https://hub.turing158.cc.cd"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="nav-link hub-link"
-          @click="isMobile && (isCollapsed = true)"
-        >
-          <span class="nav-indicator" aria-hidden="true"></span>
-          <span class="nav-icon">
-            <SidebarIcon name="hub" :size="20" />
-          </span>
-          <span class="nav-text">hub</span>
-          <span class="nav-external">
-            <SidebarIcon name="externalLink" :size="14" />
-          </span>
-        </a>
       </nav>
 
       <!-- 选项区底部条带：草皮地面，替换原虚线分隔 -->
@@ -71,16 +55,14 @@
 
       <div class="sidebar-footer">
         <div class="theme-switcher">
-          <!-- 系统按钮 -->
+          <!-- 切换回 Pretext Bunny 主题按钮 -->
           <button
             class="theme-btn theme-btn--system px-fade"
-            :class="{ active: systemMode }"
-            :title="$t('theme.system')"
-            :aria-label="$t('theme.system')"
-            :aria-pressed="systemMode"
-            @click="toggleSystemMode"
+            title="返回 Pretext Bunny 主题"
+            aria-label="返回 Pretext Bunny 主题"
+            @click="switchToPretextHome"
           >
-            <SidebarIcon name="system" :size="18" />
+            <SidebarIcon name="bunny" :size="18" />
           </button>
           <!-- 亮色主题按钮 -->
           <button
@@ -191,9 +173,10 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useTheme, type ThemeName } from '@/composables/useTheme'
+import { useHomeStyle } from '@/composables/useHomeStyle'
 import { useAnimations } from '@/composables/useAnimations'
 import { useAchievements } from '@/composables/useAchievements'
 import { setLocale } from '@/i18n'
@@ -204,18 +187,28 @@ import SidebarIcon from '@/components/sidebar/SidebarIcon.vue'
 import SearchDialog from '@/components/search/SearchDialog.vue'
 import SettingsDialog from '@/components/settings/SettingsDialog.vue'
 import { useTypewriter } from '@/composables/useTypewriter'
+import { config } from '@/config'
 import type { TocHeading } from '@/components/article/ArticleTOCDrawer.vue'
 export type { TocHeading }
 
 const route = useRoute()
+const router = useRouter()
 const { locale } = useI18n()
+const { setHomeStyle } = useHomeStyle()
+
+function switchToPretextHome() {
+  setHomeStyle('pretext')
+  if (route.path !== '/') {
+    router.push('/')
+  }
+}
+
 const {
   theme: currentTheme,
   setTheme,
   systemMode,
   systemLightTheme,
   systemDarkTheme,
-  toggleSystemMode,
   setSystemLightTheme,
   setSystemDarkTheme,
 } = useTheme()
@@ -238,9 +231,9 @@ const { isNavUnlocked } = useAchievements()
 
 const isMobile = ref(window.innerWidth < 768)
 const isCollapsed = ref(window.innerWidth < 768)
-const fullBlogName = 'Turing_ICE'
+const fullBlogName = config.blog.title
 const { displayedText: blogName, showCursor: showBlogCursor } = useTypewriter(fullBlogName, 120, 60)
-const avatarUrl = 'https://foruda.gitee.com/avatar/1682216074543204020/12834578_turing-ice_1682216074.png'
+const avatarUrl = config.blog.avatar
 
 // 监听窗口变化，同步 isMobile 状态
 const onResize = () => {
@@ -802,11 +795,11 @@ const toggleLang = () => {
 }
 
 .theme-btn--system:not(.active) {
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(58, 204, 232, 0.28);
 }
 
 .theme-btn--system:not(.active):hover {
-  background: rgba(148, 163, 184, 0.35);
+  background: rgba(58, 204, 232, 0.48);
 }
 
 .theme-btn:not(.active)[data-theme="forest"] { background: rgba(79, 138, 69, 0.4); }

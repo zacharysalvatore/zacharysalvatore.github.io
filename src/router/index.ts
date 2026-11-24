@@ -25,10 +25,6 @@ const VIEWS: Record<string, RouteRecordRaw['component']> = {
   // 'responsive-time-demo': () => import('@/views/ResponsiveTimeDemo.vue'),
   'not-found': () => import('@/views/NotFoundView.vue'),
   error: () => import('@/views/ErrorView.vue'),
-  // ===== 独立页面（layout: 'standalone'，不渲染 MainLayout）=====
-  sfmc: () => import('@/views/standalone/SfmcLandingView.vue'),
-  'starfall-forum': () => import('@/views/standalone/StarFallForumView.vue'),
-  'sfmc-jar': () => import('@/views/standalone/SfmcJarLandingView.vue'),
 }
 
 const routes: RouteRecordRaw[] = [

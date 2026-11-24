@@ -118,32 +118,7 @@ export const MAIN_ROUTES: readonly StaticRouteMeta[] = [
 ] as const
 
 /** 独立落地页（不渲染 MainLayout） */
-export const STANDALONE_ROUTES: readonly StaticRouteMeta[] = [
-  {
-    path: '/sfmc',
-    name: 'sfmc',
-    titleKey: 'pageTitle.sfmc',
-    standalone: true,
-    sitemap: { priority: '0.8', changefreq: 'weekly' },
-    indexable: true,
-  },
-  {
-    path: '/starfall-forum',
-    name: 'starfall-forum',
-    titleKey: 'pageTitle.starfallForum',
-    standalone: true,
-    sitemap: { priority: '0.7', changefreq: 'weekly' },
-    indexable: true,
-  },
-  {
-    path: '/sfmc-jar',
-    name: 'sfmc-jar',
-    titleKey: 'pageTitle.sfmcJar',
-    standalone: true,
-    sitemap: { priority: '0.7', changefreq: 'weekly' },
-    indexable: true,
-  },
-] as const
+export const STANDALONE_ROUTES: readonly StaticRouteMeta[] = [] as const
 
 /** 错误页：预渲染但禁止索引，不进 sitemap */
 export const ERROR_ROUTES: readonly StaticRouteMeta[] = [

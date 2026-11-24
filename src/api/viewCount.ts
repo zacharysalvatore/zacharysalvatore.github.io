@@ -18,8 +18,9 @@ import { config } from '@/config'
 // 本地（dev / preview）由 apiFetch 自动改写成 Vite 代理的同源路径，绕开后端 CORS 白名单；
 // 线上（GitHub Pages）保持直连，与现在的请求方式一致。
 // 可用环境变量 VITE_API_BASE 覆盖
-const API_BASE = (import.meta.env.VITE_API_BASE ?? `${config.backendBase}/article`)
+const API_BASE = (import.meta.env.VITE_API_BASE ?? (config.backendBase ? `${config.backendBase}/article` : ''))
   .replace(/\/+$/, '')
+const HAS_API = Boolean(API_BASE)
 
 // ==================== 缓存结构 ====================
 
@@ -177,6 +178,7 @@ async function createRecord(slug: string): Promise<string> {
  * 获取单篇文章浏览量（内存读取，零网络请求）
  */
 export async function getViewCount(slug: string): Promise<number> {
+  if (!HAS_API) return 0
   try {
     if (!articleCache.has(slug)) {
       await buildCache()
@@ -192,6 +194,7 @@ export async function getViewCount(slug: string): Promise<number> {
  * 递增文章浏览量
  */
 export async function incrementViewCount(slug: string): Promise<number> {
+  if (!HAS_API) return 0
   try {
     // 确保缓存已初始化
     await buildCache()
@@ -223,6 +226,7 @@ export async function incrementViewCount(slug: string): Promise<number> {
  * 批量获取文章浏览量（内存读取，零网络请求）
  */
 export async function getViewCounts(slugs: string[]): Promise<Record<string, number>> {
+  if (!HAS_API) return {}
   try {
     await buildCache()
 
@@ -244,6 +248,7 @@ export async function getViewCounts(slugs: string[]): Promise<Record<string, num
  * 获取所有文章的总浏览量
  */
 export async function getTotalViews(): Promise<number> {
+  if (!HAS_API) return 0
   try {
     const total = await request('/sum/count') as number
     return total

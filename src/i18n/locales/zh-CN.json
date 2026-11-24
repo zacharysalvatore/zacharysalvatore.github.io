@@ -31,13 +31,13 @@
     "achievements": "成就"
   },
   "seo": {
-    "home": "Turing_ICE 的个人博客，分享技术文章、开发工具和学习笔记",
+    "home": "Zach_Gao 的个人博客 — 拥抱 AI，热爱开源和技术分享。",
     "articles": "查看所有技术文章和教程",
     "projects": "开发中的项目、已完成项目和教程",
     "releases": "各项目的发行版本、更新日志与下载资源",
     "tools": "开发者工具集：JSON 格式化、Base64 编解码、正则测试、颜色转换等",
-    "about": "了解 Turing_ICE 的背景、技能和联系方式",
-    "friends": "友情链接 — Turing_ICE 博客的友链页面",
+    "about": "了解 Zach_Gao 的背景、技能和联系方式",
+    "friends": "友情链接 — Zach_Gao 博客的友链页面",
     "achievements": "成就/徽章系统 — 探索所有隐藏成就"
   },
   "home": {
@@ -241,23 +241,15 @@
   },
   "about": {
     "title": "关于",
-    "bio": "Java / C# 开发者，热爱开源和技术分享。",
+    "bio": "拥抱 AI，热爱开源和技术分享。",
     "skills": "技能栈",
     "skillsBackend": "后端开发",
     "skillsFrontend": "前端开发",
     "skillsTools": "工具与其他",
     "timeline": "时间线",
     "timelineLatestBadge": "最新",
-    "timelineItem1Title": "按兴趣学习开发和实习",
-    "timelineItem1Desc": "根据兴趣（Minecraft）来开发各种软件和系统，这期间实践了Flutter、Qt、WPF等各种框架，学习了dart、c++、c#、go等各种语言的学习",
-    "timelineItem2Title": "系统性学习和开发系统",
-    "timelineItem2Desc": "开始系统性的学习Java的Spring系列框架、JavaFx框架，开发网页系统和桌面软件",
-    "timelineItem3Title": "接触Gradle构建和C++",
-    "timelineItem3Desc": "开始探索模组如何通过MDK制作，以及加入编程社团学习C++基础知识",
-    "timelineItem4Title": "接触代码和制作服务器插件",
-    "timelineItem4Desc": "从开始的改改配置文件实现效果到自己上手实操Java代码",
-    "timelineItem5Title": "启蒙老师",
-    "timelineItem5Desc": "接触Minecraft，让我开始喜欢上了这个开放大世界，也让我对代码有了兴趣",
+    "timelineItem1Title": "搭建个人博客",
+    "timelineItem1Desc": "上线基于 Vue 3 + Vite + GitHub Pages 的个人博客与工具站，记录 AI、开源与技术分享。",
     "contact": "联系方式",
     "email": "电子邮箱"
   },
@@ -914,7 +906,7 @@
     },
     "githubInfo": {
       "username": "GitHub 用户名",
-      "usernamePlaceholder": "例如 Turing158",
+      "usernamePlaceholder": "例如 zacharysalvatore",
       "query": "查询",
       "loading": "查询中...",
       "loadFailed": "查询失败，请检查用户名后重试",
@@ -1281,7 +1273,7 @@
     "coffee": "杯咖啡",
     "bookHeight": "本书摞起",
     "laps": "圈操场",
-    "copyright": "© {year} Turing_ICE · 与Minecraft同行"
+    "copyright": "© {year} Zach_Gao"
   },
   "achievements": {
     "title": "成就",

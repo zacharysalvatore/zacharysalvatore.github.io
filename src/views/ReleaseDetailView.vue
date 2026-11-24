@@ -204,9 +204,10 @@ import PageTitle from '@/components/common/PageTitle.vue'
 import { usePageSeo } from '@/composables/useSeo'
 import { GITHUB_API_HEADERS, githubUrl } from '@/utils/githubApi'
 import { scrollBehavior } from '@/composables/useAnimations'
+import { config } from '@/config'
 
 const router = useRouter()
-const GITHUB_OWNER = 'Turing158'
+const GITHUB_OWNER = config.github.owner
 
 const props = defineProps<{ repo: string }>()
 
@@ -387,7 +388,9 @@ function openGithub() {
 }
 
 function openGitee() {
-  window.open(`https://gitee.com/turing-ice/${repoName.value}`, '_blank')
+  if (config.gitee.owner) {
+    window.open(`https://gitee.com/${config.gitee.owner}/${repoName.value}`, '_blank')
+  }
   showPlatformDialog.value = false
 }
 

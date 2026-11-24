@@ -2,56 +2,26 @@
  * 博客配置文件
  *
  * 优先从 .env 读取环境变量（import.meta.env.VITE_*），
- * 若未配置则使用下方 JSON 默认值。
+ * 若未配置则使用下方默认值。
  * 保留 .env 是为了在部署平台（如 GitHub Pages / Vercel）上可以注入环境变量。
  */
 
-// --- 统一后端基址 ---
-// 原本分散在 5 个域名下的独立 Cloudflare Worker 已合并为 1 个
-// （合并方案与源码：D:\EducationalData\cf\merged），全部路由统一挂在单域名下，
-// 因此前端只需记一个基址，各服务按路径前缀区分：
-//   <BASE>/article/*            浏览量（原 api.turing158.dpdns.org）
-//   <BASE>/gitee/contribution   Gitee 动态（原 api.turing158.dpdns.org）
-//   <BASE>/github/api/*         GitHub REST 代理（原 turing158.github-proxy.de5.net，
-//                               新增 /github/api 前缀；owner 由 Worker 注入）
-//   <BASE>/github/user/<login>  GitHub 用户信息（原 tool-proxy.turing158.de5.net）
-//   <BASE>/github/access_token  Gitalk OAuth token（原 tool-proxy；
-//                               旧路径 /github_access_token 已随合并废弃）
-//   <BASE>/cline/model/*        Cline 模型目录（原 tool-proxy.turing158.de5.net）
-//   <BASE>/coding/data          Vibe Coding 请求数据（首页活动卡）
-//   <BASE>/friend-link/find/all 友链读取（原 blog.friendlink.de5.net）
-//   <BASE>/friend-link/apply    友链申请（原 blog.add-friendlink.de5.net）
-// 可用环境变量 VITE_BACKEND_BASE 覆盖；换域名时需同步 .env，vite.config.ts 与
-// src/utils/apiEndpoint.ts 会自动跟随该变量，无需再改代码。
-const BACKEND_BASE = (
-  import.meta.env.VITE_BACKEND_BASE || 'https://api2.turing158.dpdns.org'
-).replace(/\/+$/, '')
+// --- 可选：统一后端基址（自建 Cloudflare Worker 时配置） ---
+// 留空时，GitHub API 自动回退为直连官方 https://api.github.com，
+// 依赖私有后端的服务（浏览量、友链、Vibe Coding 等）将优雅降级。
+const BACKEND_BASE = (import.meta.env.VITE_BACKEND_BASE || '').replace(/\/+$/, '')
 
 // --- 后端域名池 ---
-// 暂时停用域名轮转，默认只请求 BACKEND_BASE；实现文件保留，后续可显式开启。
-const BACKEND_POOL_ENABLED = import.meta.env.VITE_BACKEND_POOL_ENABLED === 'true'
-
-// 下列域名各自部署了同一个合并版 Worker，但分属不同 Cloudflare 账号
-// （免费额度按【账号】计：10 万次/天，00:00 UTC 重置）。
-// 开启轮转后，任一域名额度耗尽（Error 1027）、被墙或宕机时，由 src/utils/backendPool.ts
-// 自动切到下一个域名继续服务 —— 数组顺序即优先级。
-//
-// 开启后可用 VITE_BACKEND_POOL 覆盖（逗号分隔）；未配置时 = BACKEND_BASE + 下列备用域名。
-// ⚠️ 池内每个域名都必须部署了同一个合并版 Worker，否则切过去会大面积 404。
-const BUILTIN_BACKUP_BASES = [
-  'https://api.turing158.de5.net',
-  'https://api.friendlink.de5.net',
-  'https://api.github-proxy.de5.net',
-  'https://api.add-friendlink.de5.net',
-]
+const BACKEND_POOL_ENABLED =
+  Boolean(BACKEND_BASE) && import.meta.env.VITE_BACKEND_POOL_ENABLED === 'true'
 
 const BACKEND_POOL: readonly string[] = (() => {
+  if (!BACKEND_BASE) return []
   if (!BACKEND_POOL_ENABLED) return [BACKEND_BASE]
   const raw = import.meta.env.VITE_BACKEND_POOL
   const list = raw
     ? raw.split(',').map((s) => s.trim()).filter(Boolean)
-    : [BACKEND_BASE, ...BUILTIN_BACKUP_BASES]
-  // 去重（按去掉尾斜杠后的值），保持声明顺序
+    : [BACKEND_BASE]
   const seen = new Set<string>()
   const out: string[] = []
   for (const item of list) {
@@ -64,46 +34,36 @@ const BACKEND_POOL: readonly string[] = (() => {
 })()
 
 // --- GitHub 配置 ---
-const GITHUB_OWNER = import.meta.env.VITE_GITHUB_OWNER || 'Turing158'
-const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'Turing158.github.io'
+const GITHUB_OWNER = import.meta.env.VITE_GITHUB_OWNER || 'zacharysalvatore'
+const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'zacharysalvatore.github.io'
 
-// --- GitHub REST 代理基址 ---
-// 浏览器直连 api.github.com 是匿名调用（60 次/小时，按访客出口 IP 计），
-// 站点上多处调用很容易打满，因此统一走合并后的 Worker：
-//   GET <BASE>/github/api/repos/<repo>/...  → api.github.com/repos/Turing158/<repo>/...
-//   GET <BASE>/github/api/users/events      → api.github.com/users/Turing158/events
-// owner 由 Worker 写死注入，调用方**不要**写在路径里；Worker 侧注入 PAT 把额度提到
-// 5000 次/小时并在边缘缓存。CORS 白名单由 Worker 的 NORMAL_OPERATE_ALLOW_ORIGIN 控制
-// （只放行线上域名与 localhost:3000），因此本地开发统一走 Vite 同源代理，
-// 调用一律经 src/utils/githubApi.ts。可用环境变量 VITE_GITHUB_API_BASE 覆盖。
+// --- GitHub REST 基址 ---
+// 配置了自定义 Worker 时走 <BACKEND_BASE>/github/api；否则留空，由 src/utils/githubApi.ts 直连 api.github.com
 const GITHUB_API_BASE = (
-  import.meta.env.VITE_GITHUB_API_BASE ?? `${BACKEND_BASE}/github/api`
+  import.meta.env.VITE_GITHUB_API_BASE ?? (BACKEND_BASE ? `${BACKEND_BASE}/github/api` : '')
 ).replace(/\/+$/, '')
 
 // --- GitHub 用户信息 API ---
-// 合并后与 github/api 同域，仅路径前缀不同（Worker 侧 /github/user/<login>）
-// 可用环境变量 VITE_GITHUB_USER_API 覆盖
+// 配置了自定义 Worker 时走 <BACKEND_BASE>/github/user；否则直连 https://api.github.com/users
 const GITHUB_USER_API = (
-  import.meta.env.VITE_GITHUB_USER_API ?? `${BACKEND_BASE}/github/user`
+  import.meta.env.VITE_GITHUB_USER_API ??
+  (BACKEND_BASE ? `${BACKEND_BASE}/github/user` : 'https://api.github.com/users')
 ).replace(/\/+$/, '')
 
-// --- Gitee 配置 ---
-const GITEE_OWNER = import.meta.env.VITE_GITEE_OWNER || 'turing-ice'
+// --- Gitee 配置（可选，留空则不请求 Gitee 动态） ---
+const GITEE_OWNER = import.meta.env.VITE_GITEE_OWNER || ''
 
 // --- 站点域名 ---
-// canonical / og:url / sitemap.xml 的**唯一**来源。
-// ⚠️ 必须与 CNAME 文件里的 GitHub Pages 自定义域一致：GH Pages 会把
-// `*.github.io` 301 到自定义域，若这里写 turing158.github.io，canonical 就指向
-// 一个 301 地址，Google 会自行另选规范 URL。
-// 构建时（prerender-plugin / articles-plugin）走 process.env.VITE_SITE_URL，
-// 运行时走 import.meta.env，两侧取值保持一致。
+// canonical / og:url / sitemap.xml 的唯一来源。
 const SITE_URL = (
-  import.meta.env.VITE_SITE_URL || 'https://blog.turing158.cc.cd'
+  import.meta.env.VITE_SITE_URL || 'https://zacharysalvatore.github.io'
 ).replace(/\/+$/, '')
 
 // --- 博客元信息 ---
-const BLOG_TITLE = 'Turing_ICE'
-const BLOG_AUTHOR = 'Turing158'
+const BLOG_TITLE = 'Zach_Gao'
+const BLOG_AUTHOR = 'Zach_Gao'
+const BLOG_AVATAR = 'https://github.com/zacharysalvatore.png'
+const BLOG_EMAIL = 'scottelfron@gmail.com'
 
 // --- 浏览器标题模板 ---
 // 可用变量: {current_page} — 当前页面名称
@@ -111,60 +71,52 @@ const TITLE_TEMPLATE = '{current_page} | Blog - {blog_title}'
 
 // --- 开发中项目仓库列表（用于获取最近提交） ---
 const DEVELOPING_REPOS = [
-  'SFMCL-Transformed',
-  'Turing158.github.io',
+  'zacharysalvatore.github.io',
 ]
 
-// --- 评论代理 ---
-// Gitalk OAuth 换 token 由合并后的 Worker（/github/access_token）转发到 GitHub；
-// 注意旧路径 /github_access_token 在合并后已 404，勿改回
-const GITALK_PROXY = `${BACKEND_BASE}/github/access_token`
-const GITALK_CLIENT_ID = import.meta.env.VITE_GITALK_CLIENT_ID || '0275b8f48f2a7e0ac1b0'
+// --- 评论配置（Gitalk） ---
+const GITALK_PROXY = BACKEND_BASE
+  ? `${BACKEND_BASE}/github/access_token`
+  : 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+const GITALK_CLIENT_ID = import.meta.env.VITE_GITALK_CLIENT_ID || ''
 
 // --- 节假日 API ---
 // 第三方公开接口，CORS 自身放行，保持直连不经代理
 const HOLIDAY_API_BASE = 'https://date.nager.at/api/v3/publicholidays'
 const HOLIDAY_COUNTRY = 'CN'
 
-// --- Cline 推荐/免费模型 API ---
-// 经合并后的 Worker（/cline/model/recommended）转发 Cline 接口，规避浏览器 CORS
-// 可用环境变量 VITE_CLINE_API_BASE 覆盖
-const CLINE_MODELS_API = import.meta.env.VITE_CLINE_API_BASE
-  ?? `${BACKEND_BASE}/cline/model/recommended`
+// --- Cline 推荐/免费模型 API（可选） ---
+const CLINE_MODELS_API =
+  import.meta.env.VITE_CLINE_API_BASE ??
+  (BACKEND_BASE ? `${BACKEND_BASE}/cline/model/recommended` : '')
 
-// --- Cline 全量模型目录 API ---
-// Worker 的 /cline/model/all 返回 OpenRouter 全量目录（{ data: ClineModel[] }），
-// 搜索 Tab 以此为基础做本地过滤；可用环境变量 VITE_CLINE_ALL_API 覆盖
-const CLINE_MODELS_ALL_API = import.meta.env.VITE_CLINE_ALL_API
-  ?? `${BACKEND_BASE}/cline/model/all`
+// --- Cline 全量模型目录 API（可选） ---
+const CLINE_MODELS_ALL_API =
+  import.meta.env.VITE_CLINE_ALL_API ??
+  (BACKEND_BASE ? `${BACKEND_BASE}/cline/model/all` : 'https://openrouter.ai/api/v1/models')
 
-// --- Vibe Coding 活动 API ---
-// 首页 VibeCodingWidget 用：GET {BASE}/coding/data 返回
-// { online, request_data[], time }，request_data 为 date × model 逐条请求记录
-// （含 token / 延迟明细），字段见组件头注释。前端自行按 date / model 聚合；
-// Worker 侧建议边缘缓存 30min。可用环境变量 VITE_CODING_DATA_API 覆盖
-const VIBE_API = import.meta.env.VITE_CODING_DATA_API ?? `${BACKEND_BASE}/coding/data`
+// --- Vibe Coding 活动 API（可选） ---
+const VIBE_API =
+  import.meta.env.VITE_CODING_DATA_API ?? (BACKEND_BASE ? `${BACKEND_BASE}/coding/data` : '')
 
 // --- 缓存 TTL（毫秒） ---
 const ARTICLES_CACHE_TTL = 5 * 60 * 1000 // 5 分钟
 
 export const config = {
-  /** 站点域名：canonical / og:url / sitemap 的唯一来源（见上方 SITE_URL 注释） */
+  /** 站点域名：canonical / og:url / sitemap 的唯一来源 */
   site: {
     url: SITE_URL,
   },
-  /** 统一后端基址：默认使用 api2 单 API（见文件头注释的路径分工） */
+  /** 统一后端基址（未配置自定义 Worker 时为空字符串） */
   backendBase: BACKEND_BASE,
-  /** 是否启用域名轮转；默认关闭，保留实现以便后续恢复 */
+  /** 是否启用域名轮转 */
   backendPoolEnabled: BACKEND_POOL_ENABLED,
-  /**
-   * 关闭轮转时只包含 backendBase；开启后按顺序切换备用域名。
-   */
+  /** 后端域名池 */
   backendPool: BACKEND_POOL,
   github: {
     owner: GITHUB_OWNER,
     repo: GITHUB_REPO,
-    /** GitHub REST 代理基址：GET <apiBase>/repos/<repo>/... 与 /users/<login>/... */
+    /** GitHub REST 代理基址（空字符串表示直连官方 api.github.com） */
     apiBase: GITHUB_API_BASE,
     userApi: GITHUB_USER_API,
   },
@@ -178,6 +130,8 @@ export const config = {
   blog: {
     title: BLOG_TITLE,
     author: BLOG_AUTHOR,
+    avatar: BLOG_AVATAR,
+    email: BLOG_EMAIL,
     titleTemplate: TITLE_TEMPLATE,
   },
   developingRepos: DEVELOPING_REPOS,

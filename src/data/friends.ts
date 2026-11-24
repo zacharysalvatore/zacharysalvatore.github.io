@@ -20,10 +20,11 @@ export interface FriendLink {
 
 // 后端绝对地址：派生自统一后端基址（合并后的单个 Worker，见 src/config.ts）。
 // 本地由 apiFetch 自动改走 Vite 代理（同源，绕开 CORS 白名单），线上直连
-const API_BASE = `${config.backendBase}/friend-link`
+const API_BASE = config.backendBase ? `${config.backendBase}/friend-link` : ''
 
 /** 拉取全部友情链接（接口要求 POST，无需请求体，避免预检请求） */
 export async function fetchFriendLinks(): Promise<FriendLink[]> {
+  if (!API_BASE) return []
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), 10_000)
   try {
@@ -71,6 +72,9 @@ const APPLY_API_BASE = API_BASE
 
 /** 提交友链申请（业务校验失败时 HTTP 仍为 200，以返回体 success/error 为准） */
 export async function applyFriendLink(payload: ApplyFriendLinkPayload): Promise<ApplyFriendLinkResult> {
+  if (!APPLY_API_BASE) {
+    return { success: false, error: '友链后端服务尚未配置' }
+  }
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), 10_000)
   try {
